@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>nonograms</title>
+    <meta name="description" content="A pure HTML/CSS/JS Nonograms (Monograms / Picross) logic puzzle game with multiple grid sizes, rich pixel art levels, and webxdc integration." />
+    <meta property="og:title" content="nonograms" />
+    <meta property="og:description" content="A pure HTML/CSS/JS Nonograms (Monograms / Picross) logic puzzle game with multiple grid sizes, rich pixel art levels, and webxdc integration." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body class="lang-fa">
+    <div id="app-root">
+      <!-- SCREEN 0: Puzzles GZ Loading Overlay -->
+      <div id="puzzles-loading-overlay" class="puzzles-loading-overlay" aria-live="polite" role="status">
+        <div class="puzzles-loading-card">
+          <div class="mini-grid-loader" aria-hidden="true">
+            <div class="m-cell c1"></div>
+            <div class="m-cell c2"></div>
+            <div class="m-cell c3"></div>
+            <div class="m-cell c4"></div>
+            <div class="m-cell c5"></div>
+            <div class="m-cell c6"></div>
+            <div class="m-cell c7"></div>
+            <div class="m-cell c8"></div>
+            <div class="m-cell c9"></div>
+          </div>
+          <div class="puzzles-loading-info">
+            <h2 class="puzzles-loading-title" id="puzzles-loading-title" data-i18n="loadingPuzzles">در حال بارگذاری پازل‌ها...</h2>
+            <div class="puzzles-loading-bar-wrap">
+              <div class="puzzles-loading-bar-stripes"></div>
+            </div>
+            <p class="puzzles-loading-status" id="puzzles-loading-status" data-i18n="openingPuzzlesGz">در حال باز کردن puzzles.gz...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confetti Canvas for Victory -->
+      <canvas id="confetti-canvas"></canvas>
+
+      <!-- SCREEN 1: Home Menu -->
+      <main class="app-screen" id="screen-home">
+        <!-- Home Top Bar with Tutorial and Settings on both sides -->
+        <div class="home-top-bar">
+          <button class="icon-btn" data-nav="tutorial" title="How to Play" aria-label="How to Play" data-icon="tutorial"></button>
+          <button class="icon-btn" data-nav="settings" title="Settings" aria-label="Settings" data-icon="settings"></button>
+        </div>
+
+        <section class="hero-section">
+          <h1 class="hero-title" data-i18n="appTitle">نونوگرام</h1>
+          <p class="hero-subtitle" data-i18n="tagline">پازل‌های منطقی پیکسل آرت و جدول ژاپنی</p>
+        </section>
+
+        <section class="home-menu-grid">
+          <!-- Dynamic Continue Active Game Card -->
+          <div class="menu-card continue-card hidden" id="home-continue-btn">
+            <div class="menu-card-icon" data-icon="play"></div>
+            <div class="menu-card-content">
+              <h3 data-i18n="continueGame">ادامه بازی</h3>
+              <p id="home-continue-subtitle">ادامه پازل در حال حل...</p>
+            </div>
+          </div>
+
+          <div class="menu-card" id="menu-play-levels" data-nav="levels">
+            <div class="menu-card-icon" data-icon="gamepad"></div>
+            <div class="menu-card-content">
+              <h3 data-i18n="levels">مراحل و پازل‌ها</h3>
+              <p data-i18n="levelsSubtitle">مجموعه‌ای غنی از پازل‌های متنوع در ابعاد گوناگون</p>
+            </div>
+          </div>
+
+          <div class="menu-card" id="home-daily-btn">
+            <div class="menu-card-icon" data-icon="daily"></div>
+            <div class="menu-card-content">
+              <h3 data-i18n="dailyChallenge">چالش روزانه</h3>
+              <p data-i18n="dailySubtitle">هر روز یک پازل اختصاصی و جذاب برای ورزش مغز!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Random Generator Box with Difficulty and Size selection -->
+        <div class="random-box-card">
+          <div class="random-box-title">
+            <span data-icon="dice"></span>
+            <span data-i18n="randomGenerator">تولید پازل تصادفی</span>
+          </div>
+          <div class="random-box-controls">
+            <div class="random-field">
+              <span data-i18n="gridSize">اندازه جدول:</span>
+              <select id="random-size-select" class="select-dropdown">
+                <option value="5">۵×۵</option>
+                <option value="6">۶×۶</option>
+                <option value="7">۷×۷</option>
+                <option value="8">۸×۸</option>
+                <option value="9">۹×۹</option>
+                <option value="10" selected>۱۰×۱۰</option>
+                <option value="11">۱۱×۱۱</option>
+                <option value="12">۱۲×۱۲</option>
+                <option value="13">۱۳×۱۳</option>
+                <option value="14">۱۴×۱۴</option>
+                <option value="15">۱۵×۱۵</option>
+                <option value="16">۱۶×۱۶</option>
+                <option value="17">۱۷×۱۷</option>
+                <option value="18">۱۸×۱۸</option>
+                <option value="19">۱۹×۱۹</option>
+                <option value="20">۲۰×۲۰</option>
+              </select>
+            </div>
+
+            <div class="random-field">
+              <span data-i18n="difficulty">درجه سختی:</span>
+              <select id="random-diff-select" class="select-dropdown">
+                <option value="easy" data-i18n="diffEasy">ساده (الگوهای منظم)</option>
+                <option value="medium" selected data-i18n="diffMedium">متوسط (متعادل)</option>
+                <option value="hard" data-i18n="diffHard">سخت (استنتاج عمیق)</option>
+              </select>
+            </div>
+
+            <!-- Progressive Escalation Mode Toggle with Description -->
+            <div class="random-progressive-field">
+              <div class="progressive-toggle-row">
+                <div class="progressive-label-box">
+                  <span class="progressive-title"><span data-icon="growth" class="icon-inline"></span> <span data-i18n="progressiveModeTitle">حالت رشد تدریجی</span></span>
+                  <p class="progressive-desc" data-i18n="progressiveModeDesc">با حل هر پازل، پازل بعدی به طور خودکار ۱ سطر و ستون بزرگ‌تر می‌شود (۵×۵ ← ۶×۶ ← ۷×۷ ...)</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="random-progressive-toggle" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <button class="primary-btn" id="home-random-btn" data-i18n="startRandom">شروع پازل تصادفی</button>
+          </div>
+        </div>
+      </main>
+
+      <!-- SCREEN 2: Level Select -->
+      <section class="app-screen" id="screen-levels">
+        <div class="levels-header">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+            <h2 data-i18n="selectLevel">انتخاب پازل</h2>
+            <button class="secondary-btn" data-nav="home" data-i18n="backToHome">بازگشت به خانه</button>
+          </div>
+
+          <!-- Real-Time Search Bar -->
+          <div class="levels-search-bar">
+            <div class="search-input-wrapper">
+              <span class="search-icon" data-icon="search"></span>
+              <input type="search" id="puzzle-search-input" class="search-input" placeholder="Search puzzles by name or size..." data-i18n-placeholder="searchPuzzlesPlaceholder" />
+              <button type="button" id="puzzle-search-clear-btn" class="search-clear-btn hidden" title="Clear search" aria-label="Clear search">✕</button>
+            </div>
+            <span class="puzzles-count-badge" id="puzzles-found-count">0 puzzles</span>
+          </div>
+
+          <!-- Filter Options & Controls Bar -->
+          <div class="levels-controls-bar">
+            <!-- Adult Content Filter -->
+            <div class="filter-control-group">
+              <label for="adult-filter-select" class="filter-control-label">
+                <span data-icon="adult" class="icon-inline"></span>
+                <span data-i18n="adultFilterTitle">رده سنی:</span>
+              </label>
+              <select id="adult-filter-select" class="select-dropdown-sm">
+                <option value="safe" data-i18n="adultFilterSafe" selected>خانوادگی (بدون ۱۸+)</option>
+                <option value="all" data-i18n="adultFilterAll">همه محتوا (عادی و ۱۸+)</option>
+                <option value="adult" data-i18n="adultFilterAdult">فقط ۱۸+ بزرگسال</option>
+              </select>
+            </div>
+
+            <!-- Color Filter -->
+            <div class="filter-control-group">
+              <label for="color-filter-select" class="filter-control-label">
+                <span data-icon="color" class="icon-inline"></span>
+                <span data-i18n="colorCount">رنگ‌ها</span>
+              </label>
+              <select id="color-filter-select" class="select-dropdown-sm">
+                <option value="all" data-i18n="colorFilterAll">همه رنگ‌ها</option>
+                <option value="monochrome" data-i18n="colorFilterMono">تک‌رنگ</option>
+                <option value="multicolor" data-i18n="colorFilterMulti">چند رنگ</option>
+              </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="filter-control-group">
+              <label for="status-filter-select" class="filter-control-label">
+                <span data-icon="check" class="icon-inline"></span>
+                <span data-i18n="statusFilterTitle">وضعیت:</span>
+              </label>
+              <select id="status-filter-select" class="select-dropdown-sm">
+                <option value="all" data-i18n="statusFilterAll" selected>همه وضعیت‌ها</option>
+                <option value="unsolved" data-i18n="statusFilterUnsolved">حل نشده</option>
+                <option value="completed" data-i18n="statusFilterCompleted">حل شده</option>
+              </select>
+            </div>
+
+            <!-- Page Size Filter -->
+            <div class="filter-control-group">
+              <label for="page-size-select" class="filter-control-label">
+                <span data-i18n="pageSizeLabel">تعداد:</span>
+              </label>
+              <select id="page-size-select" class="select-dropdown-sm">
+                <option value="20">۲۰</option>
+                <option value="40">۴۰</option>
+                <option value="80">۸۰</option>
+                <option value="all" data-i18n="pageSizeAll">همه (یک‌جا)</option>
+              </select>
+            </div>
+
+            <!-- Solution Preview Toggle Button -->
+            <button class="preview-mode-toggle-btn" id="toggle-preview-mode-btn" title="Toggle Solution Preview">
+              <span id="preview-mode-icon" data-icon="previewHide" class="icon-inline"></span>
+              <span id="preview-mode-text" data-i18n="previewMystery">پیش‌نمایش: مخفی</span>
+            </button>
+          </div>
+
+          <!-- Category Buttons Filter -->
+          <div class="category-buttons-bar" id="category-buttons-container">
+            <button class="category-filter-btn active" data-category="all" data-i18n="catAll">همه</button>
+            <button class="category-filter-btn" data-category="small" data-i18n="catSmall">کوچک (تا ۱۵)</button>
+            <button class="category-filter-btn" data-category="medium" data-i18n="catMedium">متوسط (۱۶ تا ۲۵)</button>
+            <button class="category-filter-btn" data-category="large" data-i18n="catLarge">بزرگ (۲۶+)</button>
+          </div>
+
+          <!-- Top Quick Pager Bar -->
+          <div class="levels-top-pager" id="levels-top-pager"></div>
+        </div>
+
+        <div class="levels-grid" id="levels-grid-list"></div>
+        <div class="levels-top-pager levels-bottom-pager" id="levels-bottom-pager"></div>
+      </section>
+
+      <!-- SCREEN 3: In-Game Screen -->
+      <section class="app-screen" id="screen-game">
+        <!-- Map-like Interactive Board Viewport (Background Canvas) -->
+        <div class="game-board-viewport" id="game-board-viewport">
+          <div id="board-pan-zoom-container" class="board-pan-zoom-container">
+            <div id="nonograms-game-container"></div>
+          </div>
+        </div>
+
+        <div class="game-sidebar-container">
+          <!-- Floating Overlay UI: Header -->
+          <div class="game-header-box game-overlay-top" id="game-header-box">
+            <!-- Row 1: Settings at Left, Timer at Center, Pause at Right -->
+            <div class="game-header-top-row">
+              <button class="icon-btn game-settings-btn" data-nav="settings" title="Settings" aria-label="Settings" data-icon="settings"></button>
+              <div class="game-header-timer">
+                <span id="game-timer-display">00:00</span>
+              </div>
+              <button class="icon-btn game-pause-btn" id="game-pause-btn" title="Pause" data-icon="pause"></button>
+            </div>
+
+            <!-- Row 2: Puzzle name & Hearts Container at both sides -->
+            <div class="game-header-sub-row" dir="ltr">
+              <div class="game-header-title-box" id="game-header-title-box" title="Puzzle">
+                <span id="game-active-puzzle-title" title="Puzzle">Puzzle</span>
+                <span id="game-active-puzzle-dimensions" class="puzzle-dim-pill"></span>
+              </div>
+              <div class="game-header-hearts-box" id="game-hearts-container"></div>
+            </div>
+          </div>
+
+          <!-- Floating Overlay UI: Multi-Color Swatch Selector Bar -->
+          <div class="game-color-palette-bar game-overlay-palette hidden" id="game-color-palette-bar"></div>
+
+          <!-- Floating Overlay UI: Bottom Controls (Single Card Container) -->
+          <div class="game-bottom-toolbar game-overlay-bottom" id="game-normal-toolbar">
+            <!-- Main Mode Switcher: Fill / Cross / Mark -->
+            <div class="mode-selector-bar">
+              <button class="control-mode-btn active" data-mode="fill">
+                <span class="btn-icon" data-icon="fill"></span>
+                <span data-i18n="modeFill">رنگ</span>
+              </button>
+              <button class="control-mode-btn" data-mode="cross">
+                <span class="btn-icon" data-icon="cross"></span>
+                <span data-i18n="modeCross">ضربدر</span>
+              </button>
+              <button class="control-mode-btn" data-mode="question">
+                <span class="btn-icon" data-icon="question"></span>
+                <span data-i18n="modeMark">شک</span>
+              </button>
+            </div>
+
+            <!-- Helper Action Tools -->
+            <div class="actions-bar">
+              <button class="action-tool-btn" id="game-undo-btn" title="Undo" aria-label="Undo">
+                <span class="btn-icon" data-icon="undo"></span>
+              </button>
+              <button class="action-tool-btn" id="game-redo-btn" title="Redo" aria-label="Redo">
+                <span class="btn-icon" data-icon="redo"></span>
+              </button>
+              <button class="action-tool-btn" id="game-hint-btn" title="Get Hint" aria-label="Get Hint">
+                <span class="btn-icon" data-icon="hint"></span>
+                <span class="hint-badge-num" id="hints-count-val">0</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Floating Overlay UI: Surrender / View Result Controls -->
+          <div class="game-bottom-toolbar game-overlay-bottom hidden" id="game-surrender-bar">
+            <div style="text-align: center; font-weight: bold; font-size: 1.15rem; color: #ef4444; margin: 0.15rem 0;" data-i18n="surrendered">تسلیم شدید</div>
+            <div class="surrender-toggle-box" style="display: flex; align-items: center; justify-content: center; gap: 0.65rem; margin: 0.35rem 0;">
+              <span style="font-size: 0.88rem; font-weight: 800;" data-i18n="myAnswers">پاسخ من</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="surrender-toggle-solution" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <span style="font-size: 0.88rem; font-weight: 800;" data-i18n="correctSolution">پاسخ درست</span>
+            </div>
+            <button class="primary-btn" id="surrender-back-btn" data-i18n="backToSelectPuzzle">خروج از پازل</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: Tutorial / How to Play with Sample Grid at Last Row & Controls Tutorial -->
+      <section class="app-screen" id="screen-tutorial">
+        <div class="levels-header">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 data-i18n="tutorialTitle">آموزش و قوانین بازی نونوگرام (پیکروس)</h2>
+            <button class="secondary-btn" data-nav="home" data-i18n="backToHome">بازگشت به خانه</button>
+          </div>
+        </div>
+
+        <div class="tutorial-steps-grid">
+          <div class="tutorial-step-card">
+            <h4 data-i18n="tutStep1Title">۱. هدف بازی</h4>
+            <p data-i18n="tutStep1Desc">با پر کردن خانه‌های صحیح بر اساس اعداد راهنما در سطرها و ستون‌ها، تصویر پیکسلی مخفی را آشکار کنید.</p>
+          </div>
+          <div class="tutorial-step-card">
+            <h4 data-i18n="tutStep2Title">۲. معنای اعداد راهنما</h4>
+            <p data-i18n="tutStep2Desc">اعداد نشان‌دهنده دسته‌های متوالی خانه‌های پر هستند. برای مثال، «۳ ۱» یعنی ۳ خانه متوالی پر، حداقل ۱ خانه خالی، و سپس ۱ خانه پر.</p>
+          </div>
+          <div class="tutorial-step-card">
+            <h4 data-i18n="tutStep3Title">۳. استفاده از ضربدر (X)</h4>
+            <p data-i18n="tutStep3Desc">وقتی مطمئن شدید خانه‌ای باید خالی بماند روی آن ضربدر بگذارید تا مسیر بقیه سطرها مشخص شود.</p>
+          </div>
+          <div class="tutorial-step-card">
+            <h4 data-i18n="tutStep4Title">۴. کلیک وسط و کشیدن برای پاک‌کردن</h4>
+            <p data-i18n="tutStep4Desc">کلیک چپ رنگ می‌کند، کلیک راست ضربدر می‌زند و کلیک یا درگ دکمه وسط ماوس خانه‌ها را پاک و خالی می‌کند.</p>
+          </div>
+        </div>
+
+        <!-- Interactive Solved Sample Component (Moved to the last row) -->
+        <div class="tutorial-sample-card" id="tutorial-interactive-section" style="margin-top: 1rem;">
+          <h4 data-i18n="sampleTutorialTitle">نمونه تعاملی و قابل بازی</h4>
+          <p data-i18n="sampleTutorialDesc">می‌توانید روی خانه‌های جدول زیر ضربه بزنید یا کلیک کنید تا پر کردن یا ضربدر زدن را امتحان کنید! به تطابق اعداد با سطرها و ستون‌ها دقت کنید.</p>
+          <div id="tutorial-sample-board" style="display: flex; justify-content: center; margin-top: 1rem;"></div>
+          
+          <!-- Sample Mode controls for testing inside tutorial -->
+          <div class="tutorial-sample-tools" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.75rem;">
+            <button class="tutorial-tool-btn active" id="tut-tool-fill" data-tutmode="fill"><span data-icon="fill" class="icon-inline"></span> <span data-i18n="modeFill">رنگ</span></button>
+            <button class="tutorial-tool-btn" id="tut-tool-cross" data-tutmode="cross"><span data-icon="cross" class="icon-inline"></span> <span data-i18n="modeCross">ضربدر</span></button>
+            <button class="tutorial-tool-btn" id="tut-tool-reset"><span data-icon="undo" class="icon-inline"></span> <span data-i18n="reset">شروع دوباره</span></button>
+          </div>
+        </div>
+
+        <!-- Mouse, Keyboard & Touch Controls Guide Under Interactive Sample -->
+        <div class="tutorial-step-card tutorial-controls-card" style="margin-top: 1.25rem;">
+          <h4 data-i18n="controlsGuideTitle">راهنمای کنترل‌ها در کامپیوتر و لمسی (موبایل)</h4>
+          
+          <div class="controls-guide-grid">
+            <div class="controls-guide-column">
+              <h5 class="controls-guide-subtitle"><span data-icon="mouse" class="icon-inline"></span> <span data-i18n="controlsMouseTitle">کنترل‌های ماوس (کامپیوتر)</span></h5>
+              <ul class="controls-bullet-list">
+                <li data-i18n="ctrlMouse1"><strong>کلیک چپ و درگ:</strong> پر کردن یا پاک کردن سریع خانه‌ها در امتداد سطر یا ستون</li>
+                <li data-i18n="ctrlMouse2"><strong>کلیک راست و درگ:</strong> قرار دادن یا حذف ضربدر (X) برای علامت‌گذاری خانه‌های خالی</li>
+                <li data-i18n="ctrlMouse3"><strong>درگ کلیک وسط ماوس یا کلیک و درگ با کلید Ctrl:</strong> جابه‌جایی و حرکت روی بورد بازی</li>
+              </ul>
+            </div>
+
+            <div class="controls-guide-column">
+              <h5 class="controls-guide-subtitle"><span data-icon="keyboard" class="icon-inline"></span> <span data-i18n="controlsKeyboardTitle">میانبرهای کیبورد (صفحه‌کلید)</span></h5>
+              <ul class="controls-bullet-list">
+                <li data-i18n="ctrlKey1"><strong>کلیدهای جهت‌نما یا WASD:</strong> حرکت و پیمایش بین خانه‌های جدول</li>
+                <li data-i18n="ctrlKey2"><strong>Space / Enter:</strong> پر کردن خانه فعلی، <strong>X / C:</strong> علامت ضربدر، <strong>Q:</strong> شک، <strong>Delete:</strong> پاک‌کردن</li>
+                <li data-i18n="ctrlKey3"><strong>کلیدهای ۱ تا ۵:</strong> انتخاب رنگ‌ها، <strong>+ و - و 0:</strong> کنترل بزرگ‌نمایی (Zoom)، <strong>Z / Y:</strong> بازگشت و جلو</li>
+              </ul>
+            </div>
+
+            <div class="controls-guide-column">
+              <h5 class="controls-guide-subtitle"><span data-icon="touch" class="icon-inline"></span> <span data-i18n="controlsTouchTitle">کنترل‌های لمسی (گوشی و تبلت)</span></h5>
+              <ul class="controls-bullet-list">
+                <li data-i18n="ctrlTouch1"><strong>ضربه یا کشیدن (Tap/Drag):</strong> اعمال حالت انتخابی فعلی بر روی خانه‌ها</li>
+                <li data-i18n="ctrlTouch2"><strong>نگه داشتن لمس (Hold ۳۰۰ میلی‌ثانیه):</strong> قرار دادن یا حذف سریع ضربدر (X) بدون نیاز به تعویض ابزار</li>
+                <li data-i18n="ctrlTouch3"><strong>نوار ابزار پایین:</strong> انتخاب و سوییچ سریع بین رنگ، ضربدر و علامت شک</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: center;">
+          <button class="primary-btn" data-nav="levels" data-i18n="startPractice" style="padding: 0.85rem 2rem;">شروع حل پازل‌ها</button>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: Settings -->
+      <section class="app-screen" id="screen-settings">
+        <div class="levels-header">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 data-i18n="settingsTitle">تنظیمات بازی</h2>
+            <button class="secondary-btn" data-nav="home" data-i18n="backToHome">بازگشت به خانه</button>
+          </div>
+        </div>
+
+        <div class="settings-list">
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="language">زبان برنامه</span>
+              <span data-i18n="languageDesc">تغییر زبان رابط کاربری</span>
+            </div>
+            <!-- Language Select element as requested -->
+            <select id="setting-language-select" class="select-dropdown">
+              <option value="auto" data-i18n="langAuto">خودکار (سیستم)</option>
+              <option value="fa">فارسی</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="theme">پوسته ظاهری</span>
+              <span data-i18n="themeDesc">انتخاب تم رنگی</span>
+            </div>
+            <!-- Auto, Dark, Light Themes -->
+            <select id="setting-theme-select" class="select-dropdown">
+              <option value="auto" data-i18n="themeAuto">خودکار (سیستم)</option>
+              <option value="dark" data-i18n="themeDark">تاریک</option>
+              <option value="light" data-i18n="themeLight">روشن</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="gameMode">محدودیت خطا</span>
+              <span data-i18n="gameModeDesc">تعداد جان‌ها در هر دست</span>
+            </div>
+            <select id="setting-gamemode-select" class="select-dropdown">
+              <option value="hearts" data-i18n="mode3Hearts">۳ جان (استاندارد)</option>
+              <option value="zen" data-i18n="modeZen">حالت آرامش / بدون باخت (Zen)</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="soundFX">جلوه‌های صوتی</span>
+              <span data-i18n="soundFXDesc">پخش صدا هنگام پر کردن خانه‌ها و پیروزی</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-sound-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="pixelFont">قلم پیکسلی</span>
+              <span data-i18n="pixelFontDesc">استفاده از فونت پیکسلی رویین در رابط کاربری</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-pixelfont-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="vibration">لرزش لمسی (Haptic)</span>
+              <span data-i18n="vibrationDesc">لرزش کوتاه در گوشی</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-vibration-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="autoCrossNumbers">خط زدن خودکار اعداد</span>
+              <span data-i18n="autoCrossNumbersDesc">کم‌رنگ شدن و خط خوردن اعداد سطرهایی که کامل شده‌اند</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-autocross-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="autoFillCrosses">پر کردن خودکار ضربدر</span>
+              <span data-i18n="autoFillCrossesDesc">ضربدر زدن خودکار خانه‌های خالی خطوط کامل شده</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-autofill-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="highlightCrosshairs">روشن شدن سطر و ستون</span>
+              <span data-i18n="highlightCrosshairsDesc">نمایش خطوط راهنمای متقاطع</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-highlight-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="showTimer">نمایش زمان‌سنج</span>
+              <span data-i18n="showTimerDesc">نمایش زمان در بالای صفحه بازی</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-showtimer-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="webxdcBroadcast">اطلاع‌رسانی حل پازل</span>
+              <span data-i18n="webxdcBroadcastDesc">ارسال پیام خودکار به گروه چت هنگام حل هر پازل</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-webxdc-broadcast-toggle" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-box">
+              <span data-i18n="showResultPreview">پیش‌نمایش تصویر پازل</span>
+              <span data-i18n="showResultPreviewDesc">نمایش تصویر پیکسلی کامل روی کارت‌های پازل</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-preview-toggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODAL 1: Victory Modal (Scrollable if long) -->
+      <div class="modal-overlay hidden" id="victory-modal">
+        <div class="modal-card">
+          <div class="modal-icon-container">
+            <span data-icon="trophy" class="modal-large-icon" style="color: var(--accent);"></span>
+          </div>
+          <div class="modal-header-block">
+            <h3 data-i18n="victoryTitle">آفرین! پازل حل شد</h3>
+            <p id="victory-puzzle-name" class="modal-puzzle-name"></p>
+            <p data-i18n="victorySubtitle" class="modal-subtitle">با استدلال منطقی تصویر مخفی را آشکار کردید.</p>
+          </div>
+          
+          <!-- Solved Pixel Art Preview -->
+          <div class="victory-preview-box" id="victory-preview-box">
+            <div id="victory-puzzle-preview"></div>
+          </div>
+
+          <div class="modal-stats-grid" id="victory-stats-grid">
+            <div class="modal-stat-item" id="victory-stat-time">
+              <span data-i18n="time">زمان</span>
+              <span id="victory-time-val">00:00</span>
+            </div>
+            <div class="modal-stat-item" id="victory-stat-mistakes">
+              <span data-i18n="mistakes">خطاها</span>
+              <span id="victory-mistakes-val">0</span>
+            </div>
+            <div class="modal-stat-item hidden" id="victory-stat-hints">
+              <span data-i18n="hints">راهنمایی</span>
+              <span id="victory-hints-val">0</span>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="primary-btn" id="victory-next-btn" data-i18n="nextLevel">پازل بعدی</button>
+            <button class="secondary-btn" id="victory-again-btn" data-i18n="playAgain">بازی دوباره</button>
+            <button class="secondary-btn" id="victory-share-btn" data-i18n="shareSolution">اشتراک‌گذاری پیروزی</button>
+            <button class="secondary-btn" id="victory-menu-btn" data-i18n="backToMenu">منوی اصلی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 2: Game Over Modal -->
+      <div class="modal-overlay hidden" id="gameover-modal">
+        <div class="modal-card">
+          <div class="modal-icon-container">
+            <span data-icon="heartBreak" class="modal-large-icon" style="color: #ef4444;"></span>
+          </div>
+          <div class="modal-header-block">
+            <h3 data-i18n="gameOverTitle">پایان بازی</h3>
+            <p data-i18n="gameOverSubtitle" class="modal-subtitle">تعداد خطاهای شما به سقف مجاز رسید.</p>
+            <p data-i18n="zenModeHint" class="modal-hint" style="font-size: 0.85rem; color: var(--accent); margin-top: 0.15rem;">نکته: می‌توانید در تنظیمات، حالت آرامش (Zen Mode) را برای بازی بدون باخت فعال کنید.</p>
+          </div>
+
+          <div class="modal-actions">
+            <button class="primary-btn" id="gameover-retry-btn" data-i18n="tryAgain">تلاش مجدد</button>
+            <button class="secondary-btn" id="gameover-zen-btn" data-i18n="continueZen">ادامه در حالت آرامش (Zen)</button>
+            <button class="secondary-btn" id="gameover-menu-btn" data-i18n="backToMenu">منوی اصلی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 3: Pause Modal -->
+      <div class="modal-overlay hidden" id="pause-modal">
+        <div class="modal-card">
+          <div class="modal-header-block">
+            <h3 data-i18n="gamePaused">بازی متوقف شد</h3>
+          </div>
+          <div class="modal-actions">
+            <button class="primary-btn" id="pause-resume-btn" data-i18n="resume">ادامه بازی</button>
+            <button class="secondary-btn" id="pause-restart-btn" data-i18n="reset">شروع دوباره</button>
+            <button class="secondary-btn" id="pause-giveup-btn" data-i18n="giveUp">تسلیم و مشاهده نتیجه</button>
+            <button class="secondary-btn" id="pause-menu-btn" data-i18n="backToSelectPuzzle">خروج از پازل</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 4: Reset Confirmation Modal -->
+      <div class="modal-overlay hidden" id="reset-modal">
+        <div class="modal-card">
+          <div class="modal-icon-container">
+            <span data-icon="warning" class="modal-large-icon" style="color: #ef4444;"></span>
+          </div>
+          <div class="modal-header-block">
+            <h3 data-i18n="confirmReset">آیا از شروع دوباره پازل اطمینان دارید؟</h3>
+            <p data-i18n="resetConfirmSubtitle" class="modal-subtitle" style="font-size: 0.88rem; color: var(--text-muted);">تمامی خانه‌های بورد پاک خواهند شد.</p>
+          </div>
+          <div class="modal-actions">
+            <button class="primary-btn" id="reset-confirm-btn" data-i18n="confirmResetAction" style="background-color: #ef4444 !important; color: #ffffff !important;">بله، شروع دوباره</button>
+            <button class="secondary-btn" id="reset-cancel-btn" data-i18n="cancelReset">خیر، ادامه بازی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 5: Surrender Confirmation Modal -->
+      <div class="modal-overlay hidden" id="surrender-modal">
+        <div class="modal-card">
+          <div class="modal-icon-container">
+            <span data-icon="warning" class="modal-large-icon" style="color: #ef4444;"></span>
+          </div>
+          <div class="modal-header-block">
+            <h3 data-i18n="confirmSurrender">آیا از تسلیم شدن اطمینان دارید؟</h3>
+            <p data-i18n="surrenderConfirmSubtitle" class="modal-subtitle" style="font-size: 0.88rem; color: var(--text-muted);">پاسخ کامل پازل نمایش داده خواهد شد و بازی جاری پایان می‌یابد.</p>
+          </div>
+          <div class="modal-actions">
+            <button class="primary-btn" id="surrender-confirm-btn" data-i18n="confirmSurrenderAction" style="background-color: #ef4444 !important; color: #ffffff !important;">بله، تسلیم و نمایش نتیجه</button>
+            <button class="secondary-btn" id="surrender-cancel-btn" data-i18n="cancelSurrender">خیر، ادامه بازی</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts Architecture -->
+    <script src="./webxdc.js"></script>
+    <script src="./scripts/pako.min.js"></script>
+    <script src="./scripts/i18n.js"></script>
+    <script src="./scripts/icons.js"></script>
+    <script src="./scripts/settings.js"></script>
+    <script src="./scripts/audio.js"></script>
+    <script src="./scripts/nonograms.js"></script>
+    <script src="./scripts/puzzles.js"></script>
+    <script src="./scripts/game.js"></script>
+    <script src="./scripts/main.js"></script>
+  </body>
+</html>
