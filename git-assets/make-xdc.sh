@@ -10,7 +10,6 @@ IGNORE_LIST=(
   "temp"
   "git-assets"
   ".git"
-  "puzzles_compressor"
   ".github"
   "node_modules"
   "src"

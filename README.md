@@ -32,6 +32,11 @@ To test real chat integration, you have two options:
 
 Add a new language translation dictionary in `/scripts/i18n.js` (copy the `en` object and translate the values).
 
-### Custom Typography
+### Custom Puzzle Datasets
 
-The game uses the custom pixelated typeface [Rooyin](https://github.com/MohamadDarvishi/Rooyin/) for crisp numbers, clues, and UI elements.
+You can build and compress custom `puzzles.gz` dataset files using `puzzle_compressor`. It compiles raw puzzle collections from [nonograms-archive](https://github.com/Dorifor/nonograms-archive) into optimized binary compressed archives used by the game.
+
+## Credits & Acknowledgments
+
+- The game uses the custom pixelated typeface [Rooyin](https://github.com/MohamadDarvishi/Rooyin/).
+- Built-in nonogram puzzles in this game are sourced from [nonograms-archive](https://github.com/Dorifor/nonograms-archive).
