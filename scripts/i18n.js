@@ -403,10 +403,13 @@ class I18nManager {
       if (lower.startsWith('fa') || lower.startsWith('ar') || lower.startsWith('pes') || lower.startsWith('prs')) {
         return 'fa';
       }
+      if (lower.startsWith('en')) {
+        return 'en';
+      }
     } catch (e) {
-      // Fallback
+      // Fallback below
     }
-    return 'fa'; // Default app primary lang is fa
+    return 'en'; // Non-Persian/undetectable system languages default to English
   }
 
   getSetting() {

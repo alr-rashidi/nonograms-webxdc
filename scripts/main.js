@@ -858,7 +858,7 @@ class App {
     // Language Select
     const langSelect = document.getElementById('setting-language-select');
     if (langSelect) {
-      langSelect.value = window.i18n.getLang();
+      langSelect.value = window.i18n.getSetting();
       langSelect.addEventListener('change', (e) => {
         const lang = e.target.value;
         window.i18n.setLang(lang);
