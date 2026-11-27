@@ -17,7 +17,6 @@ class SettingsManager {
       showTimer: true,
       webxdcBroadcast: true,
       pixelFont: true,
-      adultFilter: 'safe' // 'all', 'safe', 'adult'
     };
     this.settings = this.loadSettings();
 

@@ -9,7 +9,6 @@ class App {
     this.activeLevelCategory = 'all';
     this.gameOriginScreen = 'levels';
     this.searchQuery = '';
-    this.adultFilter = (window.settingsManager && window.settingsManager.get('adultFilter')) || 'safe';
     this.colorFilter = 'all';
     this.statusFilter = 'all';
     this.showResultPreview = window.settingsManager ? (window.settingsManager.get('showResultPreview') !== false) : true;
@@ -25,12 +24,12 @@ class App {
 
   getFilteredPuzzles(category = this.activeLevelCategory) {
     const q = (this.searchQuery || '').trim().toLowerCase();
-    const filterKey = `${category}|${q}|${this.adultFilter}|${this.colorFilter}|${this.statusFilter}|${window.puzzleManager ? window.puzzleManager.puzzles.length : 0}`;
+    const filterKey = `${category}|${q}|${this.colorFilter}|${this.statusFilter}|${window.puzzleManager ? window.puzzleManager.puzzles.length : 0}`;
     if (this.cachedFilterKey === filterKey && this.cachedFilteredPuzzles && this.cachedFilteredPuzzles.length >= 0) {
       return this.cachedFilteredPuzzles;
     }
     this.cachedFilterKey = filterKey;
-    this.cachedFilteredPuzzles = window.puzzleManager ? (window.puzzleManager.getPuzzlesByCategory(category, this.searchQuery, this.adultFilter, this.colorFilter, this.statusFilter) || []) : [];
+    this.cachedFilteredPuzzles = window.puzzleManager ? (window.puzzleManager.getPuzzlesByCategory(category, this.searchQuery, this.colorFilter, this.statusFilter) || []) : [];
     return this.cachedFilteredPuzzles;
   }
 
@@ -54,7 +53,7 @@ class App {
     this.injectIcons();
 
     // 3. Initialize Game Engine
-    const gameContainer = document.getElementById('nonogram-game-container');
+    const gameContainer = document.getElementById('nonograms-game-container') || document.getElementById('nonogram-game-container');
     if (gameContainer && window.gameEngine) {
       window.gameEngine.init(gameContainer);
     }
@@ -222,12 +221,6 @@ class App {
         btn.classList.toggle('active', btn.dataset.category === this.activeLevelCategory);
       });
 
-      // Sync Adult Filter select
-      const adultSelect = document.getElementById('adult-filter-select');
-      if (adultSelect) {
-        adultSelect.value = this.adultFilter;
-      }
-
       // Sync Color Filter select
       const colorSelect = document.getElementById('color-filter-select');
       if (colorSelect) {
@@ -331,20 +324,6 @@ class App {
           this.currentPage = 1;
           this.renderLevelList(this.activeLevelCategory);
         }, 350);
-      });
-    }
-
-    // Adult Content Filter Select
-    const adultSelect = document.getElementById('adult-filter-select');
-    if (adultSelect) {
-      adultSelect.addEventListener('change', (e) => {
-        this.adultFilter = e.target.value;
-        if (window.settingsManager) {
-          window.settingsManager.set('adultFilter', this.adultFilter);
-        }
-        if (window.sounds) window.sounds.playClick();
-        this.currentPage = 1;
-        this.renderLevelList(this.activeLevelCategory);
       });
     }
 
@@ -1324,7 +1303,6 @@ class App {
           <div class="level-card-header">
             <span class="level-size-tag">${puzzle.cols}×${puzzle.rows}</span>
             <div style="display: flex; align-items: center; gap: 0.3rem;">
-              ${puzzle.isAdult ? `<span class="level-adult-badge" title="18+ Adult">${window.i18n ? window.i18n.t('adultBadge') : '18+'}</span>` : ''}
               ${isMultiColor ? `<span class="level-color-badge" title="${puzzle.colorCount} Colors">🎨 ${puzzle.colorCount}</span>` : ''}
               ${isCompleted ? `<span class="level-badge-done" title="${window.i18n ? window.i18n.t('completed') : 'Completed'}"><span class="icon-inline">${checkmarkSvg}</span></span>` : ''}
             </div>

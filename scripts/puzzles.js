@@ -20,7 +20,6 @@ class PuzzleManager {
       medium: [],
       large: [],
       color: [],
-      adult: []
     };
   }
 
@@ -64,11 +63,10 @@ class PuzzleManager {
     const authorId = (parts[1] || '').trim();
     const title = (parts[2] || (`Puzzle #${id}`)).trim();
     const authorName = (parts[3] || '').trim();
-    const isAdult = parts[4] === '1';
     const cols = parseInt(parts[5], 10);
     const rows = parseInt(parts[6], 10);
     const colorCount = parseInt(parts[7] || '1', 10);
-    
+
     if (isNaN(cols) || isNaN(rows) || cols <= 0 || rows <= 0) {
       console.warn(`[پازل نامعتبر] نادیده گرفته شد به دلیل ابعاد نامعتبر (ستون: ${cols}، سطر: ${rows}). آیدی پازل: nono_${id}`);
       return null;
@@ -167,7 +165,6 @@ class PuzzleManager {
       name: title,
       author: authorName,
       authorId: authorId,
-      isAdult: isAdult,
       cols: cols,
       rows: rows,
       width: cols,
@@ -382,11 +379,9 @@ class PuzzleManager {
       medium: [],
       large: [],
       color: [],
-      adult: []
     };
     for (let i = 0; i < this.puzzles.length; i++) {
       const p = this.puzzles[i];
-      if (p.isAdult) buckets.adult.push(p);
       if (p.colorCount > 1) buckets.color.push(p);
       if (p.size <= 15) buckets.small.push(p);
       else if (p.size <= 25) buckets.medium.push(p);
@@ -404,20 +399,20 @@ class PuzzleManager {
     return this.puzzleMap.get(id) || this.puzzleMap.get(String(id)) || null;
   }
 
-  getPuzzlesByCategory(category = 'all', searchQuery = '', adultFilter = 'safe', colorFilter = 'all', statusFilter = 'all') {
+  getPuzzlesByCategory(category = 'all', searchQuery = '', colorFilter = 'all', statusFilter = 'all') {
     const q = (searchQuery || '').trim().toLowerCase();
-    const isDefaultFilter = adultFilter === 'all' && colorFilter === 'all' && statusFilter === 'all' && !q;
+    const isDefaultFilter = colorFilter === 'all' && statusFilter === 'all' && !q;
 
     // Ultra-fast path: If standard category with no extra filters, return pre-computed bucket in 0.001ms
     if (isDefaultFilter && this.categoryBuckets[category]) {
       return this.categoryBuckets[category];
     }
 
-    const cacheKey = `${category}|${q}|${adultFilter}|${colorFilter}|${statusFilter}|${this.puzzles.length}`;
+    const cacheKey = `${category}|${q}|${colorFilter}|${statusFilter}|${this.puzzles.length}`;
     if (this._filterCache.has(cacheKey)) {
       return this._filterCache.get(cacheKey);
     }
-    
+
     // Choose the smallest starting candidate list
     let sourcePool = this.puzzles;
     if (category && category !== 'all' && category !== 'completed' && this.categoryBuckets[category]) {
@@ -427,14 +422,6 @@ class PuzzleManager {
     const qRaw = q.startsWith('#') ? q.slice(1).trim() : q;
 
     const result = sourcePool.filter(puzzle => {
-      // Adult Content Filter
-      if (adultFilter === 'safe' && puzzle.isAdult) {
-        return false;
-      }
-      if (adultFilter === 'adult' && !puzzle.isAdult) {
-        return false;
-      }
-
       // Color Filter
       if (colorFilter === 'monochrome' && puzzle.colorCount > 1) {
         return false;
@@ -459,7 +446,6 @@ class PuzzleManager {
           if (category === 'medium' && (puzzle.size <= 15 || puzzle.size > 25)) return false;
           if (category === 'large' && puzzle.size <= 25) return false;
           if (category === 'color' && puzzle.colorCount <= 1) return false;
-          if (category === 'adult' && !puzzle.isAdult) return false;
         }
       }
 
@@ -502,7 +488,7 @@ class PuzzleManager {
   getDailyPuzzle(dateString = null) {
     const date = dateString ? new Date(dateString) : new Date();
     const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    
+
     // Hash the date key to select a puzzle from the library
     let hash = 0;
     for (let i = 0; i < dateKey.length; i++) {
@@ -579,7 +565,7 @@ class PuzzleManager {
     this._progressCache.set(puzzleId, progressData);
     try {
       localStorage.setItem(`nonogram_progress_${puzzleId}`, JSON.stringify(progressData));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   getProgress(puzzleId) {
@@ -603,7 +589,7 @@ class PuzzleManager {
     this._progressCache.delete(puzzleId);
     try {
       localStorage.removeItem(`nonogram_progress_${puzzleId}`);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   saveActiveGame(puzzleOrId) {
@@ -619,7 +605,7 @@ class PuzzleManager {
           localStorage.setItem('nonogram_active_puzzle_data', JSON.stringify(p));
         }
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   getActiveGameId() {
@@ -637,7 +623,7 @@ class PuzzleManager {
         const p = JSON.parse(raw);
         if (p && p.id) return p;
       }
-    } catch (e) {}
+    } catch (e) { }
     const activeId = this.getActiveGameId();
     if (activeId) {
       return this.getPuzzleById(activeId);
@@ -652,7 +638,7 @@ class PuzzleManager {
       if (localStorage.getItem('nonogram_last_screen') === 'game') {
         localStorage.setItem('nonogram_last_screen', 'home');
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 

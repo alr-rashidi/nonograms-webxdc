@@ -3,102 +3,6 @@
  * Contains all SVG strings directly added from uploaded icons without modification.
  */
 window.ICONS = {
-  // From adult.svg
-  adult: `<svg
-   width="10"
-   height="10"
-   viewBox="0 0 2.6458334 2.6458334"
-   version="1.1"
-   id="svg1"
-   xml:space="preserve"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><defs
-     id="defs1" /><g
-     id="layer1"><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect70"
-       width="1.5875"
-       height="0.26458332"
-       x="0.52916664"
-       y="0" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect71"
-       width="0.26458332"
-       height="0.26458332"
-       x="2.1166666"
-       y="0.26458332" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect72"
-       width="0.26458332"
-       height="1.5875"
-       x="2.3812499"
-       y="0.52916664" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect73"
-       width="0.26458332"
-       height="0.26458332"
-       x="2.1166666"
-       y="2.1166666" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect74"
-       width="1.5875"
-       height="0.26458332"
-       x="0.52916664"
-       y="2.3812499" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect75"
-       width="0.26458332"
-       height="1.5875"
-       x="0"
-       y="0.52916664" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect76"
-       width="0.26458332"
-       height="0.26458332"
-       x="0.26458332"
-       y="2.1166666" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77"
-       width="0.26458332"
-       height="0.26458332"
-       x="0.26458332"
-       y="0.26458332" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77-6"
-       width="0.26458332"
-       height="0.26458332"
-       x="0.5291667"
-       y="0.5291667" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77-64"
-       width="0.26458332"
-       height="0.26458332"
-       x="0.79375011"
-       y="0.79375011" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77-8"
-       width="0.26458332"
-       height="0.26458332"
-       x="1.3229166"
-       y="1.3229166" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77-646"
-       width="0.26458332"
-       height="0.26458332"
-       x="1.8520833"
-       y="1.8520833" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77-1"
-       width="0.26458332"
-       height="0.26458332"
-       x="1.0583334"
-       y="1.0583334" /><rect
-       style="fill:#000000;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round"
-       id="rect77-645"
-       width="0.26458332"
-       height="0.26458332"
-       x="1.5875"
-       y="1.5875" /></g></svg>`,
   // From calendar.svg
   calendar: `<svg
    width="10"
@@ -1631,7 +1535,7 @@ window.ICONS = {
   heartBreak: `<svg viewBox="0 0 2.6458334 2.6458334" fill="currentColor" shape-rendering="crispEdges" class="svg-icon"><g><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="1.0583334" y="0.5291667" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="0.5291667" y="0.26458335" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="1.5875001" y="0.26458335" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.5291667" x="2.3812501" y="0.79375005" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.5291667" x="0" y="0.79375005" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.26458335" y="1.3229167" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.5291667" y="1.5875001" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.79375005" y="1.8520834" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="2.1166668" y="1.3229167" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="1.8520834" y="1.5875001" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="1.5875001" y="1.8520834" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="1.0583334" y="2.1166668" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.26458335" y="0.5291667" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="2.1166668" y="0.5291667" /></g></svg>`,
   heartLost: `<svg viewBox="0 0 2.6458334 2.6458334" fill="currentColor" shape-rendering="crispEdges" class="svg-icon"><g><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="1.0583334" y="0.5291667" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="0.5291667" y="0.26458335" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="1.5875001" y="0.26458335" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.5291667" x="2.3812501" y="0.79375005" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.5291667" x="0" y="0.79375005" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.26458335" y="1.3229167" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.5291667" y="1.5875001" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.79375005" y="1.8520834" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="2.1166668" y="1.3229167" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="1.8520834" y="1.5875001" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="1.5875001" y="1.8520834" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.26458335" x="1.0583334" y="2.1166668" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="0.26458335" y="0.5291667" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.26458335" height="0.26458335" x="2.1166668" y="0.5291667" /></g></svg>`,
   heartActive: `<svg viewBox="0 0 2.6458334 2.6458334" fill="currentColor" shape-rendering="crispEdges" class="svg-icon"><g><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.5291667" x="0.5291667" y="0.26458335" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.5291667" x="1.5875001" y="0.26458335" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.5291667" x="2.1166668" y="0.79375005" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.5291667" x="0" y="0.79375005" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="0.5291667" height="0.5291667" x="1.0583334" y="1.8520834" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="2.1166668" height="1.0583334" x="0.26458335" y="0.5291667" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="1.5875001" height="0.5291667" x="0.5291667" y="1.3229167" /><rect style="fill:currentColor;stroke-width:0.564999;stroke-linecap:round;stroke-linejoin:round" width="1.0583334" height="0.5291667" x="0.79375005" y="1.5875001" /></g></svg>`,
-  star: `<svg viewBox="0 0 11 11" fill="currentColor" shape-rendering="crispEdges" class="svg-icon"><path d="M5 1h1v1H5V1zm-1 1h3v1H4V2zm-2 1h7v1H2V3zm-1 1h9v2H1V4zm1 2h7v1H2V6zm1 1h5v1H3V7zm-1 1h2v1H2V8zm5 0h2v1H7V8zm-3 1h3v1H4V9z"/></svg>`
+  star: `<svg viewBox="0 0 11 11" fill="currentColor" shape-rendering="crispEdges" class="svg-icon"><path d="M5 1h1v1H5V1zm-1 1h3v1H4V2zm-2 1h7v1H2V3zm-1 1h9v2H1V4zm1 2h7v1H2V6zm1 1h5v1H3V7zm-1 1h2v1H2V8zm5 0h2v1H7V8zm-3 1h3v1H4V9z"/></svg>`,
 };
 
 // Bind aliases directly to the exact uploaded SVGs

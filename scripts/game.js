@@ -315,7 +315,10 @@ class GameEngine {
   }
 
   init(containerEl) {
-    this.container = containerEl;
+    this.container = containerEl || document.getElementById('nonograms-game-container') || document.getElementById('nonogram-game-container');
+    if (!this.container) {
+      console.warn('[GameEngine] Board container (#nonograms-game-container) not found; board will not render.');
+    }
     this.initPanZoom();
   }
 

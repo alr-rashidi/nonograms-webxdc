@@ -1341,19 +1341,6 @@ body.lang-fa {
   opacity: 1;
 }
 
-/* Adult Badge on Level Cards */
-.level-adult-badge {
-  font-size: 0.72rem;
-  background: #ef4444;
-  color: #ffffff;
-  border: 1.5px solid #000000;
-  padding: 0.15rem 0.45rem;
-  border-radius: var(--radius-sm);
-  font-weight: 900;
-  box-shadow: 1px 1px 0px #000000;
-  letter-spacing: 0.02em;
-}
-
 .level-card-info {
   display: flex;
   flex-direction: column;
@@ -2990,7 +2977,6 @@ input:checked + .toggle-slider:before {
 }
 
 .level-size-tag,
-.level-adult-badge,
 .level-color-badge,
 .zen-badge {
   display: inline-flex;
